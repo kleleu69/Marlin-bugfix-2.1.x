@@ -39,3 +39,26 @@ platformio run -e creality_v4
 - Probe offsets and bed size configured for Ender 2 Pro (165x165mm bed)
 - Based on Marlin bugfix-2.1.x branch
 - GPL-3.0 License
+
+## Runtime Calibration
+
+Home offsets, probe offsets, and extruder E-steps are adjustable without recompiling:
+
+```gcode
+M206 X0 Y0 Z0        ; Set XYZ home offsets
+M851 X9 Y-29 Z-2.3   ; Example probe offsets; calibrate for your mounting
+M92 E932            ; BIQU H2 V2S default E-steps (steps/mm)
+M500                ; Save all settings to EEPROM
+M503                ; Report current settings
+```
+
+M851 accepts X and Y offsets from -50 to +50 mm and Z offsets from -5 to +3 mm.
+Z-safe homing places the probe at the 165×165 mm bed center (82.5, 82.5 mm).
+After homing, use the LCD Z Probe Offset control for 0.01 mm babystepping
+while preparing or printing the first layer. Run M500 after adjustments to
+save the updated probe offset across power cycles.
+
+Previously saved EEPROM values can override new firmware defaults. If needed,
+run `M92 E932` followed by `M500` to apply the new extruder default without
+resetting other calibration. `M501` reloads saved settings; `M502` resets all
+settings to firmware defaults (save with `M500` only if that reset is intended).
