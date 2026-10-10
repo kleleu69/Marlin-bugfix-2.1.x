@@ -1709,8 +1709,8 @@
     //#define CUSTOM_STATUS_SCREEN_IMAGE  // Show the bitmap in Marlin/_Statusscreen.h on the status screen.
   #endif
 
-  //#define SOUND_MENU_ITEM   // Add a mute option to the LCD menu
-  #define SOUND_ON_DEFAULT    // Buzzer/speaker default enabled state
+  #define SOUND_MENU_ITEM   // Add a mute option to the LCD menu
+  //#define SOUND_ON_DEFAULT    // Buzzer/speaker default enabled state
 
   #if ENABLED(U8GLIB_SSD1309)
     //#define LCD_DOUBLE_BUFFER           // Optimize display updates. Costs ~1K of SRAM.
@@ -4206,7 +4206,7 @@
   #define GCODE_MACROS_SLOTS       5  // Up to 10 may be used
   #define GCODE_MACROS_SLOT_SIZE  50  // Maximum length of a single macro
   #if ENABLED(EEPROM_SETTINGS)
-    //#define GCODE_MACROS_IN_EEPROM  // Include macros in EEPROM
+  //#define GCODE_MACROS_IN_EEPROM  // Include macros in EEPROM
   #endif
 #endif
 

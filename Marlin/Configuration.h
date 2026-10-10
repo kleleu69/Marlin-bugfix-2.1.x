@@ -707,11 +707,11 @@
 #define PIDTEMP           // See the PID Tuning Guide at https://reprap.org/wiki/PID_Tuning
 //#define MPCTEMP         // See https://marlinfw.org/docs/features/model_predictive_control.html
 
-#define PID_MAX  2      // Limit hotend current while PID is active (see PID_FUNCTIONAL_RANGE below); 255=full current
+#define PID_MAX  255      // Limit hotend current while PID is active (see PID_FUNCTIONAL_RANGE below); 255=full current
 #define PID_K1     0.95   // Smoothing factor within any PID loop
 
 #if ENABLED(PIDTEMP)
-  //#define MIN_POWER 0           // Min power to improve PID stability (0..PID_MAX).
+  #define MIN_POWER 0           // Min power to improve PID stability (0..PID_MAX).
                                   // Get the power from the temperature report ('M105' => @:nnn) and try P*2-20 to P*2-10.
   #define PID_DEBUG             // Print PID debug data to the serial port. Use 'M303 D' to enable/disable.
   //#define PID_PARAMS_PER_HOTEND // Use separate PID parameters for each extruder (useful for mismatched extruders)
@@ -724,9 +724,9 @@
     #define DEFAULT_KI_LIST {   1.08,   1.08 }
     #define DEFAULT_KD_LIST { 114.00, 114.00 }
   #else
-    #define DEFAULT_KP  16.948
-    #define DEFAULT_KI   0.706
-    #define DEFAULT_KD 101.6
+    #define DEFAULT_KP  11.5
+    #define DEFAULT_KI   0.62
+    #define DEFAULT_KD 53.5
   #endif
 #else
   #define BANG_MAX 255    // Limit hotend current while in bang-bang mode; 255=full current
@@ -824,9 +824,9 @@
 
   // 120V 250W silicone heater into 4mm borosilicate (MendelMax 1.5+)
   // from FOPDT model - kp=.39 Tp=405 Tdead=66, Tc set to 79.2, aggressive factor of .15 (vs .1, 1, 10)
-  #define DEFAULT_BED_KP 462.10
-  #define DEFAULT_BED_KI  85.47
-  #define DEFAULT_BED_KD 624.59
+  #define DEFAULT_BED_KP 58.4
+  #define DEFAULT_BED_KI  11.40
+  #define DEFAULT_BED_KD 199.3
 
   // FIND YOUR OWN: "M303 E-1 C8 S90" to run autotune on the bed at 90 degreesC for 8 cycles.
 #else
@@ -1351,7 +1351,7 @@
  * Override with M92 (when enabled below)
  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 500 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 909}
 
 /**
  * Enable support for M92. Disable to save at least ~530 bytes of flash.
@@ -1963,8 +1963,8 @@
 // @section geometry
 
 // The size of the printable area
-#define X_BED_SIZE 165
-#define Y_BED_SIZE 165
+#define X_BED_SIZE 160
+#define Y_BED_SIZE 160
 
 // Travel limits (linear=mm, rotational=°) after homing, corresponding to endstop positions.
 #define X_MIN_POS -25
@@ -2010,7 +2010,7 @@
 #endif
 
 // Max software endstops constrain movement within maximum coordinate bounds
-//#define MAX_SOFTWARE_ENDSTOPS
+#define MAX_SOFTWARE_ENDSTOPS
 #if ENABLED(MAX_SOFTWARE_ENDSTOPS)
   #define MAX_SOFTWARE_ENDSTOP_X
   #define MAX_SOFTWARE_ENDSTOP_Y
