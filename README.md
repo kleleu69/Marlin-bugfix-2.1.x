@@ -5,9 +5,9 @@
 ## Hardware Setup
 - **Printer**: Creality Ender 2 Pro
 - **Extruder**: BIQU V2H2S (Direct Drive)
-- **Bed Leveling Probe**: BIQU Level Probe (Auto Bed Leveling)
+- **Bed Leveling Probe**: BIQU MicroProbe V2 (Auto Bed Leveling)
 - **Filament Sensor**: BIQU Filament Runout Sensor
-- **Motherboard**: Creality V4 (4.2.7)
+- **Motherboard**: BIGTREETECH SKR Mini E3 V3.0 (STM32G0B1)
 
 ## Features Enabled
 - ✅ Auto Bed Leveling (ABL) with BIQU probe
@@ -22,17 +22,43 @@
 - `Marlin/Configuration_adv.h` - Advanced features and settings
 
 ## Building the Firmware
-This firmware is configured for PlatformIO or Arduino IDE.
+Use PlatformIO with the board environment selected in `platformio.ini`.
 
 ### PlatformIO
 ```bash
-platformio run -e creality_v4
+platformio run -e STM32G0B1RE_btt
 ```
 
-### Arduino IDE
-1. Install Marlin board definitions
-2. Select: Tools → Board → Creality V4 (CR-10S/Ender-X)
-3. Compile and upload
+### Dependency-Only Environment Setup
+
+The `.github/workflows/copilot-setup-steps.yml` workflow installs PlatformIO
+and downloads the board's pinned platform, toolchain, framework, and libraries.
+It does **not** compile firmware or replace configuration files. Merge this
+workflow into the default branch to prepare each new Copilot session automatically.
+It can also be run manually from the Actions tab to check dependency installation.
+
+The setup retains the package versions specified by this firmware instead of
+upgrading the STM32 framework or compiler independently. Keep the Copilot firewall
+enabled and allow `platformio.org` for registry/download access.
+
+## Upstream Configuration References
+
+Primary reference: [MarlinFirmware/Configurations, bugfix-2.1.x](https://github.com/MarlinFirmware/Configurations/tree/2c8f5fc370eeeae4d242e6d0d69f0958e7a8b207).
+The reviewed examples use configuration version `02010300`, matching this firmware:
+
+- [Ender-2 Pro / CrealityV423](https://github.com/MarlinFirmware/Configurations/tree/2c8f5fc370eeeae4d242e6d0d69f0958e7a8b207/config/examples/Creality/Ender-2%20Pro/CrealityV423) for printer reference.
+- [Ender-3 / SKR Mini E3 V3.0](https://github.com/MarlinFirmware/Configurations/tree/2c8f5fc370eeeae4d242e6d0d69f0958e7a8b207/config/examples/Creality/Ender-3/BigTreeTech%20SKR%20Mini%20E3%203.0) for board, serial ports, and TMC2209 drivers.
+
+Secondary references: BIGTREETECH's [SKR Mini E3 documentation](https://github.com/bigtreetech/docs/blob/master/docs/SKR%20MINI%20E3.md)
+and [MicroProbe documentation and manuals](https://github.com/bigtreetech/MicroProbe).
+
+Neither Marlin example represents this complete modified printer. Do not copy
+either configuration wholesale: preserve the 165 mm bed, calibrated travel limits,
+932 E-steps, probe offsets, linear leveling, and center parking. Controller fan
+wiring remains FAN1 (PC7); the hotend automatic fan remains FAN2 (PB15).
+Native MicroProbe V2 support uses the board's PA1 enable output and PC14 probe input
+with a LOW trigger state and an explicit 30 ms wake-up delay. Verify that the
+physical wiring matches before flashing.
 
 ## Notes
 - E-steps calibrated for BIQU V2H2S extruder
