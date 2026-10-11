@@ -62,3 +62,22 @@ Previously saved EEPROM values can override new firmware defaults. If needed,
 run `M92 E932` followed by `M500` to apply the new extruder default without
 resetting other calibration. `M501` reloads saved settings; `M502` resets all
 settings to firmware defaults (save with `M500` only if that reset is intended).
+
+## Nozzle Parking
+
+The configured parking point is X82.5, Y82.5, Z180 mm. Normal parking
+(`G27 P0`, including pause/filament-change parking) raises Z before moving
+to the bed center. It never lowers Z if the nozzle is already above 180 mm,
+and retains Marlin's minimum clearance and existing travel limits.
+
+SD-print completion runs `G27 P0` followed by `M84XYE`, keeping Z enabled
+immediately after parking. The normal stepper inactivity timeout still applies.
+In your slicer's end G-code, put `G27 P0` before any stepper-disable command
+and use `M84XYE` instead of `M84` if Z must remain enabled. This is also
+needed for host/USB printing, which does not use the SD-completion hook.
+Parking requires homed axes; if the slicer disables motors first, the
+firmware safely refuses to park. Do not home over a finished print.
+
+Avoid `G27 P1` after printing: it forces Z180 even if this would lower the
+nozzle into a taller object. Ensure the print is below the parking height
+with enough clearance for the move to the center.
